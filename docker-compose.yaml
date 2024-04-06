@@ -1,0 +1,32 @@
+services:
+  backend:
+    build: ./backend
+    volumes:
+      # adjust this if your docker daemon is listening on a different unix socket path
+      - ${DOCKER_SOCKET_PATH:-/var/run/docker.sock}:/var/run/docker.sock:ro
+    develop:
+      watch:
+        - path: ./backend
+          action: rebuild
+
+  frontend:
+    build: ./frontend
+    ports:
+      # Expose frontend on http://localhost:5100
+      - 5100:5100
+    environment:
+      # requests to /server should be redirected to the backend service
+      PROXY: "/server->http://backend:8080"
+    develop:
+      watch:
+        - path: ./frontend
+          target: /app
+          action: sync
+          ignore:
+            - node_modules/
+            - package-lock.json
+            - vite.config.js
+        - path: frontend/package-lock.json
+          action: rebuild
+        - path: frontend/vite.config.js
+          action: rebuild
