@@ -91,7 +91,7 @@ func GetContainerStats(ctx context.Context, cli *client.Client, containerID stri
 
 			statsChan <- stats // Send stats to the channel
 			prevStats = containerStats
-			time.Sleep(time.Millisecond * 1000) // Adjust interval for updates
+			time.Sleep(time.Millisecond * 1000)
 		}
 	}()
 	return statsChan, nil

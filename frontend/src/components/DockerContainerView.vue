@@ -11,6 +11,7 @@ import InputText from 'primevue/inputtext';
 import Menu from 'primevue/menu';
 import Dialog from 'primevue/dialog';
 import ContainerDetail from "./ContainerDetail.vue";
+import logo from "../assets/logo.svg"
 
 let imageInputText = ref('');
 let imageName = ref('');
@@ -171,10 +172,11 @@ const openModal = (container) => {
 
 </script>
 <template>
-
   <div>
-    <div class="w-full h-16 bg-cyan-700 flex items-center">
-      <h1 class="font-bold text-white text-lg px-6">Kinexon docker runtime</h1>
+    <div class="w-full h-16 flex items-center bg-cyan-700 drop-shadow-md">
+      <div class="font-bold text-white flex items-center text-lg px-6">
+        <img :src="logo" class="w-[120px] h-[22px] mr-2" alt="logo"/> <span> docker runtime</span>
+      </div>
     </div>
 
     <div class="shadow-lg m-4 rounded border">
@@ -262,7 +264,7 @@ const openModal = (container) => {
     </div>
 
     <Dialog v-if="visible" v-model:visible="visible" maximizable modal :header="getContainerName(selectedContainer.Names)"
-            :style="{ width: '80rem' }"
+            :style="{ width: '90%' }"
             :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
             @hide="()=>{
               visible = false

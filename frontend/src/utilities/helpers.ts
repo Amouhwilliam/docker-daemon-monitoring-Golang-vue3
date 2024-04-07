@@ -1,9 +1,9 @@
-
+import {eachMinuteOfInterval} from "date-fns";
 
 export const updateChartDataSet = (chart: any, metric: number, label: string) => {
     const now = new Date().toLocaleTimeString("it-IT", {hour: "2-digit", minute: "2-digit", second: "2-digit"})
 
-    if (chart.data.datasets[0].data.length > 30) {
+    if (chart.data.datasets[0].data.length > 20) {
       chart.data.datasets[0].data.shift();
       chart.data.labels.shift();
     }
@@ -15,7 +15,7 @@ export const updateChartDataSet = (chart: any, metric: number, label: string) =>
 export const updateNetworkChartDataSet = (chart: any, networkInput: number, networkOutput: number, inputLabel: string, outputLabel: string) => {
     const now = new Date().toLocaleTimeString("it-IT", {hour: "2-digit", minute: "2-digit", second: "2-digit"})
 
-    if (chart.data.datasets[0].data.length > 30 && chart.data.datasets[1].data.length > 30) {
+    if (chart.data.datasets[0].data.length > 20 && chart.data.datasets[1].data.length > 20) {
       chart.data.datasets[0].data.shift();
       chart.data.datasets[1].data.shift();
       chart.data.labels.shift();
@@ -87,10 +87,10 @@ export function setNetworkChartData() {
 }
 
 export const setChartOptions = () => {
-    const documentStyle = getComputedStyle(document.documentElement);
-    const textColor = documentStyle.getPropertyValue('--text-color');
-    const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
-    const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
+    const documentStyle: CSSStyleDeclaration = getComputedStyle(document.documentElement);
+    const textColor: string = documentStyle.getPropertyValue('--text-color');
+    const textColorSecondary: string = documentStyle.getPropertyValue('--text-color-secondary');
+    const surfaceBorder: string = documentStyle.getPropertyValue('--surface-border');
 
     return {
         maintainAspectRatio: false,
@@ -109,8 +109,7 @@ export const setChartOptions = () => {
                         x: {
                             type: 'time',
                             time: {
-                                unit: 'minute',
-                                stepSize: 1 // D
+                                unit: 'second',
                             }
                         }
                     }
@@ -126,6 +125,9 @@ export const setChartOptions = () => {
                 ticks: {
                     color: textColorSecondary,
                     min: 0,
+                    callback: function(value: number) {
+                        return value +'%';
+                    }
                 },
                 grid: {
                     color: surfaceBorder
@@ -133,4 +135,13 @@ export const setChartOptions = () => {
             }
         }
     };
+}
+let MS_PER_MINUTE = 60000;
+export const getChartsTimeLabels = () => { // prepare
+    let now: number = Date.now();
+    let startDate: Date = new Date( now - 15 * MS_PER_MINUTE);
+    return eachMinuteOfInterval({
+        start: startDate,
+        end: now
+    }).map((date: Date) => date.toLocaleTimeString("it-IT", {hour: "2-digit", minute: "2-digit", second: "2-digit"}));
 }

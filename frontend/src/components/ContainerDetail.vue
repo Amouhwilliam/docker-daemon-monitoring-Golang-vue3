@@ -2,6 +2,7 @@
 import {onMounted, onUnmounted, ref} from "vue";
 import Chart from 'primevue/chart';
 import {
+  getChartsTimeLabels,
   setChartOptions,
   setCpuChartData,
   setMemoryChartData,
@@ -27,11 +28,9 @@ interface DatasetInterface {
 const eventSource = new EventSource(`/server/containers/${container.Id}/stats`);
 
 onMounted(() => {
-
   eventSource.addEventListener("stats", (event) => {
 
     let data = JSON.parse(event.data);
-    console.log(data)
     let cpuChartInstance = cpuChartRef?.value?.chart;
     let memoryChartInstance = memoryChartRef?.value?.chart;
     let networkChartInstance = networkChartRef?.value?.chart;
@@ -68,7 +67,6 @@ onUnmounted(() => eventSource.close())
     <div class="flex w-full justify-start mt-12">
       <Chart ref="networkChartRef" type="line" :data="networkChartData" :options="chartOptions" class="h-[30rem] w-1/2 mr-6"/>
     </div>
-
   </div>
 </template>
 
