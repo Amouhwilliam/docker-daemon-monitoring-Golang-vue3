@@ -10,6 +10,6 @@ type Stats struct {
 	MemoryUsage     float64 `json:"memoryUsage"`
 	NetworkInput    uint64  `json:"networkInput"`    // Bytes received
 	NetworkOutput   uint64  `json:"networkOutput"`   // Bytes transmitted
-	NetworkInputMb  float64 `json:"networkInputMb"`  // Bytes received
-	NetworkOutputMb float64 `json:"networkOutputMb"` // Bytes transmitted
+	NetworkInputMb  float64 `json:"networkInputMb"`  // Bytes received in Mb
+	NetworkOutputMb float64 `json:"networkOutputMb"` // Bytes transmitted in Mb
 }

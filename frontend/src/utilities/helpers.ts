@@ -1,7 +1,5 @@
-import {eachMinuteOfInterval} from "date-fns";
-
 export const updateChartDataSet = (chart: any, metric: number, label: string) => {
-    const now = new Date().toLocaleTimeString("it-IT", {hour: "2-digit", minute: "2-digit", second: "2-digit"})
+    const now: string = new Date().toLocaleTimeString("it-IT", {hour: "2-digit", minute: "2-digit", second: "2-digit"})
 
     if (chart.data.datasets[0].data.length > 20) {
       chart.data.datasets[0].data.shift();
@@ -13,7 +11,7 @@ export const updateChartDataSet = (chart: any, metric: number, label: string) =>
     chart.update();
 }
 export const updateNetworkChartDataSet = (chart: any, networkInput: number, networkOutput: number, inputLabel: string, outputLabel: string) => {
-    const now = new Date().toLocaleTimeString("it-IT", {hour: "2-digit", minute: "2-digit", second: "2-digit"})
+    const now: string = new Date().toLocaleTimeString("it-IT", {hour: "2-digit", minute: "2-digit", second: "2-digit"})
 
     if (chart.data.datasets[0].data.length > 20 && chart.data.datasets[1].data.length > 20) {
       chart.data.datasets[0].data.shift();
@@ -136,6 +134,8 @@ export const setChartOptions = () => {
         }
     };
 }
+
+/*
 let MS_PER_MINUTE = 60000;
 export const getChartsTimeLabels = () => { // prepare
     let now: number = Date.now();
@@ -145,3 +145,4 @@ export const getChartsTimeLabels = () => { // prepare
         end: now
     }).map((date: Date) => date.toLocaleTimeString("it-IT", {hour: "2-digit", minute: "2-digit", second: "2-digit"}));
 }
+*/

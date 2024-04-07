@@ -10,22 +10,6 @@ import (
 	"net/http"
 )
 
-func Info(c *gin.Context) {
-
-	docker := services.Docker
-	info, err := docker.Info(context.Background())
-
-	if err != nil {
-		fmt.Println(err.Error())
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{
-		"data": info,
-	})
-}
-
 func ContainersList(c *gin.Context) {
 	imageName := c.Query("imageName")
 	containerName := c.Query("containerName")
@@ -44,7 +28,6 @@ func ContainersList(c *gin.Context) {
 
 func RestartContainer(c *gin.Context) {
 	id := c.Param("id")
-
 	err := services.RestartContainer(&id)
 
 	if err != nil {
@@ -59,7 +42,6 @@ func RestartContainer(c *gin.Context) {
 
 func RemoveContainer(c *gin.Context) {
 	id := c.Param("id")
-
 	err := services.RemoveContainer(&id)
 
 	if err != nil {
@@ -74,7 +56,6 @@ func RemoveContainer(c *gin.Context) {
 
 func StopContainer(c *gin.Context) {
 	id := c.Param("id")
-
 	err := services.StopContainer(&id)
 
 	if err != nil {
@@ -88,14 +69,12 @@ func StopContainer(c *gin.Context) {
 }
 
 func StartStreamContainerStats(c *gin.Context) {
-
 	c.Header("Content-Type", "text/event-stream")
 	c.Header("Cache-Control", "no-cache")
 	c.Header("Connection", "keep-alive")
 
 	containerID := c.Param("id")
-	docker := services.Docker
-	statsChan, err := services.GetContainerStats(context.Background(), docker, containerID)
+	statsChan, err := services.GetContainerStats(context.Background(), containerID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

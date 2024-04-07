@@ -7,7 +7,7 @@ import (
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/api/types/filters"
-	"github.com/docker/docker/client"
+	"io"
 	"kinexon/containerruntime/app/dtos"
 	"math"
 	"time"
@@ -86,19 +86,25 @@ func GetCpuCount(containerStats *types.Stats) int {
 	return cpuCount
 }
 
-func GetContainerStats(ctx context.Context, cli *client.Client, containerID string) (<-chan dtos.Stats, error) {
+func GetContainerStats(ctx context.Context, containerID string) (<-chan dtos.Stats, error) {
 	statsChan := make(chan dtos.Stats)
 	var prevStats types.Stats
 	go func() {
 		defer close(statsChan)
 		for {
-			data, err := cli.ContainerStats(ctx, containerID, true)
+			docker := Docker
+			data, err := docker.ContainerStats(ctx, containerID, true)
 			if err != nil {
 				fmt.Println("Error getting container stats:", err)
 				return
 			}
 
-			defer data.Body.Close()
+			defer func(Body io.ReadCloser) {
+				err := Body.Close()
+				if err != nil {
+					fmt.Println("Error while closing the stats streaming")
+				}
+			}(data.Body)
 
 			decoder := json.NewDecoder(data.Body)
 			var containerStats types.Stats

@@ -11,5 +11,5 @@ func init() {
 }
 
 func main() {
-	utils.RunServer("8080") //os.Getenv("PORT")
+	utils.RunServer("8080")
 }
