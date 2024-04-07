@@ -1,4 +1,4 @@
-# Docker Container Runtime (Coding Challenge)
+# Docker Container Runtime
 
 ## What's included
 This repository contains a skeleton for a Container Runtime Service that is responsible for visualizing and managing the 
