@@ -1,9 +1,4 @@
-# KINEXON Container Runtime (Coding Challenge)
-
-## What is this about?
-This challenge is part of the KINEXON interview process for full stack developers. It gives you the opportunity to show
-us your skills, interests, motivation and how you work in general.
-
+# Docker Container Runtime (Coding Challenge)
 
 ## What's included
 This repository contains a skeleton for a Container Runtime Service that is responsible for visualizing and managing the 
@@ -82,15 +77,3 @@ to update the data in an efficient way.
   or UI components to achieve this, feel free to do so.
 - To fetch information about running containers etc. you will need to use the Docker API which is documented here:
   https://docs.docker.com/engine/api/v1.44/
-
-
-### What to deliver
-Your submission should include the entire source code of your solution consisting of frontend and backend. 
-Please make sure to include all necessary files and resources. It should be possible to build and run your solution 
-locally using only "docker compose up". No other build and install steps should be necessary.
-
-The challenge is not time-boxed. You can invest as much or as little time as you want and need to.
-
-If you have any questions about the problem statement, please do not hesitate to contact us at jochen.hartl@kinexon.com.
-
-Looking forward to your submission! Good luck and have fun! 🚀
