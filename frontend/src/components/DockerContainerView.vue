@@ -1,5 +1,5 @@
 <script setup>
-import {onServerPrefetch, ref} from 'vue';
+import {ref} from 'vue';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/vue-query'
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
@@ -48,10 +48,6 @@ const items = ref([
 ]);
 
 const queryClient = useQueryClient()
-
-/*onServerPrefetch(async () => {
-
-})*/
 
 const {isFetching, isError, data: containers, error} = useQuery({
   queryKey: ['containers', imageName, containerName],

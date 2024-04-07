@@ -2,28 +2,15 @@
 import {onMounted, onUnmounted, ref} from "vue";
 import Chart from 'primevue/chart';
 import {
-  getChartsTimeLabels,
   setChartOptions,
   setCpuChartData,
   setMemoryChartData,
   setNetworkChartData,
   updateChartDataSet, updateNetworkChartDataSet
 } from "../utilities/helpers.ts";
+import {ChartDataInterface} from "../utilities/interfaces.ts";
 
 const {container} = defineProps(['container'])
-
-interface ChartDataInterface {
-  labels: Array<string>;
-  datasets: Array<DatasetInterface>;
-}
-
-interface DatasetInterface {
-  label: string;
-  data: Array<number>;
-  fill: boolean;
-  borderColor: string;
-  tension: number;
-}
 
 const eventSource = new EventSource(`/server/containers/${container.Id}/stats`);
 
