@@ -4,8 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/docker/docker/api/types/container"
-	"github.com/docker/docker/api/types/filters"
 	"github.com/gin-gonic/gin"
 	"io"
 	"kinexon/containerruntime/app/services"
@@ -26,30 +24,13 @@ func Info(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"data": info,
 	})
-
 }
 
-func ListContainer(c *gin.Context) {
-
+func ContainersList(c *gin.Context) {
 	imageName := c.Query("imageName")
 	containerName := c.Query("containerName")
 
-	var f filters.Args
-	if imageName != "" && containerName != "" {
-		f = filters.NewArgs(filters.KeyValuePair{Key: "ancestor", Value: imageName}, filters.KeyValuePair{Key: "name", Value: containerName})
-	} else if containerName != "" {
-		fmt.Println(containerName)
-		f = filters.NewArgs(filters.KeyValuePair{Key: "name", Value: containerName})
-	} else if imageName != "" {
-		f = filters.NewArgs(filters.KeyValuePair{Key: "ancestor", Value: imageName})
-	} else {
-		f = filters.NewArgs()
-	}
-
-	fmt.Println(f)
-
-	docker := services.Docker
-	containers, err := docker.ContainerList(context.Background(), container.ListOptions{All: true, Filters: f})
+	containers, err := services.ContainersList(&imageName, &containerName)
 	if err != nil {
 		fmt.Println(err.Error())
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -57,58 +38,53 @@ func ListContainer(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": containers,
+		"data": *containers,
 	})
 }
 
 func RestartContainer(c *gin.Context) {
-
 	id := c.Param("id")
-	fmt.Println(id)
-	docker := services.Docker
-	err := docker.ContainerRestart(context.Background(), id, container.StopOptions{})
+
+	err := services.RestartContainer(&id)
+
 	if err != nil {
 		fmt.Println(err.Error())
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Container restarted successfully",
 	})
 }
 
 func RemoveContainer(c *gin.Context) {
-
 	id := c.Param("id")
-	docker := services.Docker
-	err := docker.ContainerRemove(context.Background(), id, container.RemoveOptions{})
+
+	err := services.RemoveContainer(&id)
+
 	if err != nil {
 		fmt.Println(err.Error())
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Container removed successfully",
 	})
 }
 
 func StopContainer(c *gin.Context) {
-
 	id := c.Param("id")
-	docker := services.Docker
-	err := docker.ContainerStop(context.Background(), id, container.StopOptions{})
+
+	err := services.StopContainer(&id)
+
 	if err != nil {
 		fmt.Println(err.Error())
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Container stopped successfully",
 	})
-
 }
 
 func StartStreamContainerStats(c *gin.Context) {

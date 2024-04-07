@@ -5,11 +5,47 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/docker/docker/api/types"
+	"github.com/docker/docker/api/types/container"
+	"github.com/docker/docker/api/types/filters"
 	"github.com/docker/docker/client"
 	"kinexon/containerruntime/app/dtos"
 	"math"
 	"time"
 )
+
+func ContainersList(imageName *string, containerName *string) (*[]types.Container, error) {
+	var f filters.Args
+	if *imageName != "" && *containerName != "" {
+		f = filters.NewArgs(filters.KeyValuePair{Key: "ancestor", Value: *imageName}, filters.KeyValuePair{Key: "name", Value: *containerName})
+	} else if *containerName != "" {
+		fmt.Println(containerName)
+		f = filters.NewArgs(filters.KeyValuePair{Key: "name", Value: *containerName})
+	} else if *imageName != "" {
+		f = filters.NewArgs(filters.KeyValuePair{Key: "ancestor", Value: *imageName})
+	} else {
+		f = filters.NewArgs()
+	}
+
+	docker := Docker
+	containers, err := docker.ContainerList(context.Background(), container.ListOptions{All: true, Filters: f})
+
+	return &containers, err
+}
+
+func RestartContainer(id *string) error {
+	docker := Docker
+	return docker.ContainerRestart(context.Background(), *id, container.StopOptions{})
+}
+
+func RemoveContainer(id *string) error {
+	docker := Docker
+	return docker.ContainerRemove(context.Background(), *id, container.RemoveOptions{})
+}
+
+func StopContainer(id *string) error {
+	docker := Docker
+	return docker.ContainerStop(context.Background(), *id, container.StopOptions{})
+}
 
 func GetCpuUsage(previousCPU, previousSystem uint64, stat *types.Stats) float64 {
 	var (

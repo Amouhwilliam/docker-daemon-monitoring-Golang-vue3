@@ -15,7 +15,7 @@ func GetRouter() *gin.Engine {
 	router.GET("/info", controllers.Info)
 	dockerRouter := router.Group("/containers")
 
-	dockerRouter.GET("/json", controllers.ListContainer)
+	dockerRouter.GET("/json", controllers.ContainersList)
 	dockerRouter.POST("/:id/restart", controllers.RestartContainer)
 	dockerRouter.DELETE("/:id", controllers.RemoveContainer)
 	dockerRouter.POST("/:id/stop", controllers.StopContainer)
