@@ -9,6 +9,7 @@ import (
 	"github.com/docker/docker/api/types/filters"
 	"io"
 	"kinexon/containerruntime/app/dtos"
+	"log/slog"
 	"math"
 	"time"
 )
@@ -95,14 +96,14 @@ func GetContainerStats(ctx context.Context, containerID string) (<-chan dtos.Sta
 			docker := Docker
 			data, err := docker.ContainerStats(ctx, containerID, true)
 			if err != nil {
-				fmt.Println("Error getting container stats:", err)
+				slog.Error("Error getting container stats:", err)
 				return
 			}
 
 			defer func(Body io.ReadCloser) {
-				err := Body.Close()
-				if err != nil {
-					fmt.Println("Error while closing the stats streaming")
+				_err := Body.Close()
+				if _err != nil {
+					slog.Error("Error while closing the stats streaming")
 				}
 			}(data.Body)
 

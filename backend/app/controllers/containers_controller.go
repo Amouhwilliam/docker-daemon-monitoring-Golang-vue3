@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"io"
 	"kinexon/containerruntime/app/services"
+	"log/slog"
 	"net/http"
 )
 
@@ -16,7 +17,7 @@ func ContainersList(c *gin.Context) {
 
 	containers, err := services.ContainersList(&imageName, &containerName)
 	if err != nil {
-		fmt.Println(err.Error())
+		slog.Error("failed to get container list: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -32,6 +33,7 @@ func RestartContainer(c *gin.Context) {
 
 	if err != nil {
 		fmt.Println(err.Error())
+		slog.Error("failed to restart the container: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -45,7 +47,7 @@ func RemoveContainer(c *gin.Context) {
 	err := services.RemoveContainer(&id)
 
 	if err != nil {
-		fmt.Println(err.Error())
+		slog.Error("failed to remove the container: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -59,7 +61,7 @@ func StopContainer(c *gin.Context) {
 	err := services.StopContainer(&id)
 
 	if err != nil {
-		fmt.Println(err.Error())
+		slog.Error("failed to stop the container: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -91,7 +93,7 @@ func StartStreamContainerStats(c *gin.Context) {
 			// Marshal stats to JSON
 			data, _err := json.Marshal(stats)
 			if _err != nil {
-				fmt.Println("Error marshalling stats to JSON:", err)
+				slog.Error("Error marshalling stats to JSON:", err)
 				return true // Continue streaming, handle error later
 			}
 			c.SSEvent("stats", string(data)) // Send stats as SSE event
