@@ -1,6 +1,9 @@
 export const updateChartDataSet = (chart: any, metric: number, label: string) => {
     const now: string = new Date().toLocaleTimeString("it-IT", {hour: "2-digit", minute: "2-digit", second: "2-digit"})
 
+    /*
+    ** Update dataset data When the x (time) axis is getting too long
+    **/
     if (chart.data.datasets[0].data.length > 20) {
       chart.data.datasets[0].data.shift();
       chart.data.labels.shift();

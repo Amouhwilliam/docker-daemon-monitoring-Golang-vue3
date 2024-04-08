@@ -22,13 +22,16 @@ onMounted(() => {
     let memoryChartInstance = memoryChartRef?.value?.chart;
     let networkChartInstance = networkChartRef?.value?.chart;
 
-    let label = `Memory Usage (%) - ${data.usedMemoryMb.toFixed(2)}Mb / ${data.totalMemoryGb.toFixed(2)}Gb`
-    let networkInputLabel = `Network Input: ${data.networkInputMb.toFixed(2)}Mb`
-    let networkOutputLabel = `Network Output: ${data.networkOutputMb.toFixed(2)}Mb`
+    let label = `Memory Usage (%) - ${data?.usedMemoryMb.toFixed(2)}Mb / ${data?.totalMemoryGb.toFixed(2)}Gb`
+    let networkInputLabel = `Network Input: ${data?.networkInputMb.toFixed(2)}Mb`
+    let networkOutputLabel = `Network Output: ${data?.networkOutputMb.toFixed(2)}Mb`
 
-    updateChartDataSet(cpuChartInstance, data.cpuUsage, "CPU Usage (%)")
-    updateChartDataSet(memoryChartInstance, data.memoryUsage, label)
-    updateNetworkChartDataSet(networkChartInstance, data.networkInputMb, data.networkOutputMb, networkInputLabel, networkOutputLabel)
+    /*
+    ** Updating Charts
+    **/
+    updateChartDataSet(cpuChartInstance, data?.cpuUsage, "CPU Usage (%)")
+    updateChartDataSet(memoryChartInstance, data?.memoryUsage, label)
+    updateNetworkChartDataSet(networkChartInstance, data?.networkInputMb, data?.networkOutputMb, networkInputLabel, networkOutputLabel)
   });
   chartOptions.value = setChartOptions();
 });
