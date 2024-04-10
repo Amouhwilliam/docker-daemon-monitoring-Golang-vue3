@@ -19,9 +19,9 @@ let containerInputText = ref('');
 let containerName = ref('');
 let timer = null;
 const menu = ref();
-const selectedContainerId = ref('');
 const selectedContainer = ref({});
 let visible = ref(false);
+const appImageBaseName = "interview-challenge-docker-master"
 
 const items = ref([
   {
@@ -30,18 +30,26 @@ const items = ref([
         label: 'Restart',
         icon: 'pi pi-refresh',
         command: ()=> {
-          restartContainer(selectedContainerId.value)
+          restartContainer(selectedContainer.value.Id)
         }
       },
       {
         label: 'Stop',
         icon: 'pi pi-history',
-        command: ()=> stopContainer(selectedContainerId.value)
+        command: ()=> {
+          if(!selectedContainer.value.Image.includes(appImageBaseName)) {
+            stopContainer(selectedContainer.value.Id)
+          }
+        }
       },
       {
         label: 'Remove',
         icon: 'pi pi-trash',
-        command: ()=> removeContainer(selectedContainerId.value)
+        command: ()=> {
+          if(!selectedContainer.value.Image.includes(appImageBaseName)) {
+            removeContainer(selectedContainer.value.Id)
+          }
+        }
       }
     ]
   }
@@ -246,7 +254,7 @@ const openModal = (container) => {
             <div class="card flex justify-content-center">
               <Button type="button" severity="primary" icon="pi pi-ellipsis-v"
                       @click="(event) => {
-                        selectedContainerId = slotProps.data.Id
+                        selectedContainer = slotProps.data
                         toggle(event)
                       }"
                       aria-haspopup="true"
@@ -264,7 +272,7 @@ const openModal = (container) => {
             :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
             @hide="()=>{
               visible = false
-              selectedContainerId = ''
+              selectedContainer = {}
             }"
     >
       <ContainerDetail :container="selectedContainer"/>
