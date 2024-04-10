@@ -50,6 +50,9 @@ onUnmounted(() => eventSource.close())
 
 <template>
   <div>
+    <div class="text-xs mb-8">
+      id: {{container.Id}}
+    </div>
     <div class="flex w-full justify-evenly">
       <Chart ref="cpuChartRef" type="line" :data="cpuChartData" :options="chartOptions" class="h-[30rem] w-1/2 mr-6"/>
       <Chart ref="memoryChartRef" type="line" :data="memoryChartData" :options="chartOptions" class="h-[30rem] w-1/2"/>
